@@ -11,7 +11,7 @@ import GameplayKit
 
 
 class GameScene: SKScene {
-    var paddle = SKSpriteNode()
+var paddle = SKSpriteNode()
     override func didMove(to view: SKView) {
         createBackground()
         makePaddle()
@@ -32,7 +32,7 @@ class GameScene: SKScene {
     }
     func makePaddle() {
         paddle.removeFromParent()   // remove the paddle, if it exists
-        paddle = SKSpriteNode(imageNamed: “F-22 Raptor”)
+        paddle = SKSpriteNode(imageNamed: "F-22 Raptor")
         paddle.position = CGPoint(x: frame.midX, y: frame.minY + 125)
         paddle.name = "paddle"
         paddle.physicsBody = SKPhysicsBody(rectangleOf: paddle.size)

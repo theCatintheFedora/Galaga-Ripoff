@@ -11,15 +11,27 @@ import GameplayKit
 
 
 class GameScene: SKScene {
-var paddle = SKSpriteNode()
-    
+    var paddle = SKSpriteNode()
     var enemy = SKSpriteNode()
+
     override func didMove(to view: SKView) {
         createBackground()
         makePaddle()
-        
         makeEnemy()
     }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+                    let location = touch.location(in: self)
+                    paddle.position.x = location.x
+                }
+       }
+       override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+                    let location = touch.location(in: self)
+                    paddle.position.x = location.x
+                }
+       }
+    
     func createBackground() {
         let stars = SKTexture(imageNamed: "Stars")
         for i in 0...1 {
@@ -34,15 +46,17 @@ var paddle = SKSpriteNode()
             starsBackground.run(moveForever)
         }
     }
+    
     func makePaddle() {
-        paddle.removeFromParent()   // remove the paddle, if it exists
+        paddle.removeFromParent()
         paddle = SKSpriteNode(imageNamed: "F-22 Raptor")
         paddle.position = CGPoint(x: frame.midX, y: frame.minY + 125)
-        paddle.name = "paddle"
+        paddle.name = "Fighter"
         paddle.physicsBody = SKPhysicsBody(rectangleOf: paddle.size)
         paddle.physicsBody?.isDynamic = false
         addChild(paddle)
     }
+    
     func makeEnemy() {
         enemy.removeFromParent()
         enemy = SKSpriteNode(imageNamed:"Enemy fighter")
@@ -58,7 +72,6 @@ var paddle = SKSpriteNode()
         enemy.physicsBody?.contactTestBitMask = (enemy.physicsBody?.collisionBitMask)!
         addChild(enemy)
     }
-
 }
 
 

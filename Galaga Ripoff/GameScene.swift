@@ -42,7 +42,7 @@ var paddle = SKSpriteNode()
         paddle.physicsBody = SKPhysicsBody(rectangleOf: paddle.size)
         paddle.physicsBody?.isDynamic = false
         addChild(paddle)
-    
+    }
     func makeEnemy() {
         enemy.removeFromParent()
         enemy = SKSpriteNode(imageNamed:"Enemy fighter")
@@ -60,4 +60,5 @@ var paddle = SKSpriteNode()
     }
 
 }
+
 

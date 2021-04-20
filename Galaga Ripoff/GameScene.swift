@@ -8,8 +8,6 @@
 import SpriteKit
 import GameplayKit
 
-
-
 class GameScene: SKScene {
     var paddle = SKSpriteNode()
     var enemy = SKSpriteNode()
@@ -50,6 +48,7 @@ class GameScene: SKScene {
     func makePaddle() {
         paddle.removeFromParent()
         paddle = SKSpriteNode(imageNamed: "F-22 Raptor")
+        paddle.setScale(0.3)
         paddle.position = CGPoint(x: frame.midX, y: frame.minY + 125)
         paddle.name = "Fighter"
         paddle.physicsBody = SKPhysicsBody(rectangleOf: paddle.size)
@@ -60,6 +59,7 @@ class GameScene: SKScene {
     func makeEnemy() {
         enemy.removeFromParent()
         enemy = SKSpriteNode(imageNamed:"Enemy fighter")
+        enemy.setScale(0.1)
         enemy.position = CGPoint(x: frame.midX, y: frame.maxY - 50)
         enemy.name = "Enemy"
         enemy.physicsBody = SKPhysicsBody(rectangleOf: enemy.size)

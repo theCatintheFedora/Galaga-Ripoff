@@ -12,9 +12,13 @@ import GameplayKit
 
 class GameScene: SKScene {
 var paddle = SKSpriteNode()
+    
+    var enemy = SKSpriteNode()
     override func didMove(to view: SKView) {
         createBackground()
         makePaddle()
+        
+        makeEnemy()
     }
     func createBackground() {
         let stars = SKTexture(imageNamed: "Stars")
@@ -38,6 +42,22 @@ var paddle = SKSpriteNode()
         paddle.physicsBody = SKPhysicsBody(rectangleOf: paddle.size)
         paddle.physicsBody?.isDynamic = false
         addChild(paddle)
+    
+    func makeEnemy() {
+        enemy.removeFromParent()
+        enemy = SKSpriteNode(imageNamed:"Enemy fighter")
+        enemy.position = CGPoint(x: frame.midX, y: frame.maxY - 50)
+        enemy.name = "Enemy"
+        enemy.physicsBody = SKPhysicsBody(rectangleOf: enemy.size)
+        enemy.physicsBody?.isDynamic = false
+        enemy.physicsBody?.usesPreciseCollisionDetection = true
+        enemy.physicsBody?.friction = 0
+        enemy.physicsBody?.affectedByGravity = false
+        enemy.physicsBody?.restitution = 1
+        enemy.physicsBody?.linearDamping = 0
+        enemy.physicsBody?.contactTestBitMask = (enemy.physicsBody?.collisionBitMask)!
+        addChild(enemy)
     }
 
 }
+

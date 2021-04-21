@@ -8,27 +8,63 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     var paddle = SKSpriteNode()
     var enemy = SKSpriteNode()
-
+    var playLabel = SKLabelNode()
+    var livesLabel = SKLabelNode()
+    var scoreLabel = SKLabelNode()
+    var playingGame = false
+    var score = 0
+    var lives = 3
+    
     override func didMove(to view: SKView) {
+        physicsWorld.contactDelegate = self
+        self.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         createBackground()
         makePaddle()
-        makeEnemy()
+        makeLabels()
     }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-                    let location = touch.location(in: self)
-                    paddle.position.x = location.x
+            let location = touch.location(in: self)
+            if playingGame {
+                paddle.position.x = location.x
+            }
+            else {
+                for node in nodes(at: location) {
+                    if node.name == "playLabel" {
+                        playingGame = true
+                        node.alpha = 0
+                        score = 0
+                        lives = 3
+                        //updateLabels()
+                        //fix this later
+                        resetGame()
+                    }
                 }
-       }
-       override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+            }
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-                    let location = touch.location(in: self)
-                    paddle.position.x = location.x
-                }
-       }
+            let location = touch.location(in: self)
+            paddle.position.x = location.x
+        }
+    }
+    
+    func resetGame() {
+        makePaddle()
+        makeEnemy()
+        attackingFighter()
+    }
+    
+    func attackingFighter() {
+        enemy.physicsBody?.isDynamic = true
+        enemy.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -5...5), dy: -5))
+    }
     
     func createBackground() {
         let stars = SKTexture(imageNamed: "Stars")
@@ -60,7 +96,7 @@ class GameScene: SKScene {
         enemy.removeFromParent()
         enemy = SKSpriteNode(imageNamed:"Enemy fighter")
         enemy.setScale(0.1)
-        enemy.position = CGPoint(x: frame.midX, y: frame.maxY - 50)
+        enemy.position = CGPoint(x: Int.random(in: -5...5), y: Int(frame.maxY) - 10)
         enemy.name = "Enemy"
         enemy.physicsBody = SKPhysicsBody(rectangleOf: enemy.size)
         enemy.physicsBody?.isDynamic = false
@@ -72,6 +108,24 @@ class GameScene: SKScene {
         enemy.physicsBody?.contactTestBitMask = (enemy.physicsBody?.collisionBitMask)!
         addChild(enemy)
     }
+    
+    func makeLabels() {
+        playLabel.fontSize = 24
+        playLabel.text = "Tap to start"
+        playLabel.fontName = "Arial"
+        playLabel.position = CGPoint(x: frame.midX, y: frame.midY - 50)
+        playLabel.name = "playLabel"
+        addChild(playLabel)
+        
+        livesLabel.fontSize = 18
+        livesLabel.fontColor = .black
+        livesLabel.position = CGPoint(x: frame.minX + 50, y: frame.minY + 18)
+        addChild(livesLabel)
+        
+        scoreLabel.fontSize = 18
+        scoreLabel.fontColor = .black
+        scoreLabel.fontName = "Arial"
+        scoreLabel.position = CGPoint(x: frame.maxX - 50, y: frame.minY + 18)
+        addChild(scoreLabel)
+    }
 }
-
-

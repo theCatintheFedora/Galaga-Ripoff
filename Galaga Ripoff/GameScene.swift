@@ -57,11 +57,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func resetGame() {
         makePaddle()
-        makeEnemy()
         attackingFighter()
     }
     
     func attackingFighter() {
+        makeEnemy()
         enemy.physicsBody?.isDynamic = true
         enemy.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -5...5), dy: -5))
     }

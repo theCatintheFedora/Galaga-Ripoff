@@ -17,6 +17,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var playingGame = false
     var score = 0
     var lives = 3
+    var count0 = 0
+    var timer = Timer()
     
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
@@ -24,6 +26,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createBackground()
         makePaddle()
         makeLabels()
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            self.count0 += 1
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -57,7 +62,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func resetGame() {
         makePaddle()
-        attackingFighter()
+        count0 = 0
+        for _ in 0..<20 {
+            attackingFighter()
+        }
     }
     
     func attackingFighter() {

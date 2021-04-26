@@ -10,7 +10,7 @@ import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var paddle = SKSpriteNode()
-    var enemy = SKSpriteNode()
+    var enemies = [SKSpriteNode]()
     var playLabel = SKLabelNode()
     var livesLabel = SKLabelNode()
     var scoreLabel = SKLabelNode()
@@ -26,9 +26,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createBackground()
         makePaddle()
         makeLabels()
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            self.count0 += 1
-        }
+        timer = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true, block: { (timer) in
+            self.attackingFighter()
+        })
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -62,17 +62,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func resetGame() {
         makePaddle()
-        count0 = 0
-        for _ in 0..<20 {
-            attackingFighter()
-        }
     }
     
     func attackingFighter() {
         makeEnemy()
-        enemy.physicsBody?.isDynamic = true
-        enemy.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -5...5), dy: -5))
-    }
+     }
     
     func createBackground() {
         let stars = SKTexture(imageNamed: "Stars")
@@ -101,12 +95,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func makeEnemy() {
-        enemy.removeFromParent()
-        enemy = SKSpriteNode(imageNamed:"Enemy fighter")
+        let enemy = SKSpriteNode(imageNamed:"Enemy fighter")
         enemy.setScale(0.1)
         enemy.position = CGPoint(x: Int.random(in: -5...5), y: Int(frame.maxY) - 10)
         enemy.name = "Enemy"
-        enemy.physicsBody = SKPhysicsBody(rectangleOf: enemy.size)
+        enemy.physicsBody = SKPhysicsBody(circleOfRadius: enemy.size.height)
         enemy.physicsBody?.isDynamic = false
         enemy.physicsBody?.usesPreciseCollisionDetection = true
         enemy.physicsBody?.friction = 0
@@ -115,6 +108,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemy.physicsBody?.linearDamping = 0
         enemy.physicsBody?.contactTestBitMask = (enemy.physicsBody?.collisionBitMask)!
         addChild(enemy)
+        enemies.append(enemy)
+        enemy.physicsBody?.isDynamic = true
+        enemy.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -5...5), dy: -5))
     }
     
     func makeLabels() {

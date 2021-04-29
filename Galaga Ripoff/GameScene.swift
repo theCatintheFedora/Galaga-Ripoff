@@ -51,6 +51,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         }
+        //guard let touch = touches.first else { return}
+       // let location = touchlocation(in: self)
+       // touchlocation = location
+       // touchTime = CACurrentMediaTime()
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -58,6 +62,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let location = touch.location(in: self)
             paddle.position.x = location.x
         }
+       // let touchTimeThreshold: CFTimeInterval = 0.3
+        //let touchDistanceThreshold: CGFloat = 4
+     //   guard CACurrentMediaTime() - touchTime < touchTimeThreshold, ordinance.isHidden,
+              //let touch = touches.first else { return}
+       // let location = touch.location(in: self)
+        
+       // guard swipelength > touchDistanceThreshold else {return}
+        // TODO
     }
     
     func resetGame() {
@@ -66,7 +78,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func attackingFighter() {
         makeEnemy()
-     }
+    }
     
     func createBackground() {
         let stars = SKTexture(imageNamed: "Stars")
@@ -132,4 +144,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.position = CGPoint(x: frame.maxX - 50, y: frame.minY + 18)
         addChild(scoreLabel)
     }
+    
+    func ordinance() {
+        let ordinance = SKSpriteNode(imageNamed:"Ordinance")
+        ordinance.isHidden = true
+        addChild(ordinance)
+    }
+    
+    
+   
+    
+    
 }
+
+

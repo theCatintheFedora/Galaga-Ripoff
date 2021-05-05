@@ -17,8 +17,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var playingGame = false
     var score = 0
     var lives = 3
-    var count0 = 0
-    var timer = Timer()
+    //var count0 = 0
+    var timer0 = Timer()
+    var timer1 = Timer()
     var missiles = [SKSpriteNode]()
     
     override func didMove(to view: SKView) {
@@ -27,8 +28,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createBackground()
         makePaddle()
         makeLabels()
-        timer = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true, block: { (timer) in
+        timer0 = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true, block: { (timer) in
             self.attackingFighter()
+        })
+        timer1 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
             self.ordinance()
         })
     }

@@ -19,6 +19,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var lives = 3
     var count0 = 0
     var timer = Timer()
+    var missiles = [SKSpriteNode]()
     
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
@@ -28,6 +29,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         makeLabels()
         timer = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true, block: { (timer) in
             self.attackingFighter()
+            self.ordinance()
         })
     }
     
@@ -147,14 +149,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func ordinance() {
         let ordinance = SKSpriteNode(imageNamed:"Ordinance")
-        ordinance.isHidden = true
+        ordinance.name = "Ordinance"
+        ordinance.setScale(0.15)
+        ordinance.position = paddle.position
+        ordinance.physicsBody = SKPhysicsBody(circleOfRadius: ordinance.size.height/2)
+        ordinance.physicsBody?.isDynamic = false
+        ordinance.physicsBody?.usesPreciseCollisionDetection = true
+        ordinance.physicsBody?.friction = 0
+        ordinance.physicsBody?.affectedByGravity = false
+        ordinance.physicsBody?.restitution = 1
+        ordinance.physicsBody?.linearDamping = 0
+        ordinance.physicsBody?.contactTestBitMask = (ordinance.physicsBody?.collisionBitMask)!
         addChild(ordinance)
+        missiles.append(ordinance)
+        ordinance.physicsBody?.isDynamic = true
+        ordinance.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 20))
     }
-    
-    
-   
-    
-    
 }
 
 

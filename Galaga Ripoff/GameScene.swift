@@ -28,12 +28,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createBackground()
         makePaddle()
         makeLabels()
-        timer0 = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true, block: { (timer) in
-            self.attackingFighter()
-        })
-        timer1 = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
-            self.ordinance()
-        })
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -41,6 +35,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let location = touch.location(in: self)
             if playingGame {
                 paddle.position.x = location.x
+                timer0 = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true, block: { (timer) in
+                    self.attackingFighter()
+                })
+                timer1 = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true, block: { (timer) in
+                    self.ordinance()
+                })
             }
             else {
                 for node in nodes(at: location) {
@@ -57,9 +57,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         //guard let touch = touches.first else { return}
-       // let location = touchlocation(in: self)
-       // touchlocation = location
-       // touchTime = CACurrentMediaTime()
+        // let location = touchlocation(in: self)
+        // touchlocation = location
+        // touchTime = CACurrentMediaTime()
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -67,14 +67,44 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let location = touch.location(in: self)
             paddle.position.x = location.x
         }
-       // let touchTimeThreshold: CFTimeInterval = 0.3
+        // let touchTimeThreshold: CFTimeInterval = 0.3
         //let touchDistanceThreshold: CGFloat = 4
-     //   guard CACurrentMediaTime() - touchTime < touchTimeThreshold, ordinance.isHidden,
-              //let touch = touches.first else { return}
-       // let location = touch.location(in: self)
+        //   guard CACurrentMediaTime() - touchTime < touchTimeThreshold, ordinance.isHidden,
+        //let touch = touches.first else { return}
+        // let location = touch.location(in: self)
         
-       // guard swipelength > touchDistanceThreshold else {return}
+        // guard swipelength > touchDistanceThreshold else {return}
         // TODO
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        // ask each brick, "Is it you?" ha ha canibalized code go brrr
+        for enemy in enemies {
+            if contact.bodyA.node == enemy ||
+                contact.bodyB.node == enemy {
+                //      score += 1
+                //      updateLabels()
+                //      fix these later
+                enemy.removeFromParent()
+                //     removedEnemies += 1
+                //     if removedEnemies == enemies.count {
+                //        gameOver(winner: true)
+                //        there is no end
+                //         }
+            }
+        }
+        //    if contact.bodyA.node?.name == "loseZone" ||
+        //       contact.bodyB.node?.name == "loseZone" {
+        //     lives -= 1
+        //     if lives > 0 {
+        //       score = 0
+        //      resetGame()
+        //      kickBall()
+        //       }
+        //      else {
+        //        gameOver(winner: false)
+        //         }
+        //     }
     }
     
     func resetGame() {
@@ -116,7 +146,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemy.setScale(0.1)
         enemy.position = CGPoint(x: Int.random(in: -5...5), y: Int(frame.maxY) - 10)
         enemy.name = "Enemy"
-        enemy.physicsBody = SKPhysicsBody(circleOfRadius: enemy.size.height)
+        enemy.physicsBody = SKPhysicsBody(circleOfRadius: enemy.size.height/2)
         enemy.physicsBody?.isDynamic = false
         enemy.physicsBody?.usesPreciseCollisionDetection = true
         enemy.physicsBody?.friction = 0

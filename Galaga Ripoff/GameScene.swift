@@ -17,10 +17,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var playingGame = false
     var score = 0
     var lives = 3
+    var missiles = [SKSpriteNode]()
+    var enemyMissiles = [SKSpriteNode]()
     //var count0 = 0
     var timer0 = Timer()
     var timer1 = Timer()
-    var missiles = [SKSpriteNode]()
     
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
@@ -38,7 +39,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 timer0 = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true, block: { (timer) in
                     self.attackingFighter()
                 })
-                timer1 = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: true, block: { (timer) in
+                timer1 = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block: { (timer) in
                     self.ordinance()
                 })
             }
@@ -82,6 +83,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for enemy in enemies {
             if contact.bodyA.node == enemy ||
                 contact.bodyB.node == enemy {
+                if contact.bodyA.node?.name == "ordinance" ||
+                    contact.bodyB.node?.name == "ordinance" {
                 //      score += 1
                 //      updateLabels()
                 //      fix these later
@@ -91,6 +94,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 //        gameOver(winner: true)
                 //        there is no end
                 //         }
+                }
+            }
+            if contact.bodyA.node?.name == "ordinance" ||
+                contact.bodyB.node?.name == "ordinance" {
+                ordinance.removeFromParent()
             }
         }
         //    if contact.bodyA.node?.name == "loseZone" ||
@@ -182,7 +190,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func ordinance() {
         let ordinance = SKSpriteNode(imageNamed:"Ordinance")
-        ordinance.name = "Ordinance"
+        ordinance.name = "ordinance"
         ordinance.setScale(0.15)
         ordinance.position = paddle.position
         ordinance.physicsBody = SKPhysicsBody(circleOfRadius: ordinance.size.height/2)
@@ -197,6 +205,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         missiles.append(ordinance)
         ordinance.physicsBody?.isDynamic = true
         ordinance.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 20))
+    }
+    
+    func enemyOrdinance() {
+        let enemyOrdinance = SKSpriteNode(imageNamed:"Enemy ordinance")
+        enemyOrdinance.name = "enemyOrdinance"
+        enemyOrdinance.setScale(0.15)
+        enemyOrdinance.position = enemy.position
+        enemyOrdinance.physicsBody = SKPhysicsBody(circleOfRadius: enemyOrdinance.size.height/2)
+        enemyOrdinance.physicsBody?.isDynamic = false
+        enemyOrdinance.physicsBody?.usesPreciseCollisionDetection = true
+        enemyOrdinance.physicsBody?.friction = 0
+        enemyOrdinance.physicsBody?.affectedByGravity = false
+        enemyOrdinance.physicsBody?.restitution = 1
+        enemyOrdinance.physicsBody?.linearDamping = 0
+        enemyOrdinance.physicsBody?.contactTestBitMask = (enemyOrdinance.physicsBody?.collisionBitMask)!
+        addChild(enemyOrdinance)
+        enemyMissiles.append(enemyOrdinance)
+        enemyOrdinance.physicsBody?.isDynamic = true
+        enemyOrdinance.physicsBody?.applyImpulse(CGVector(dx: 0, dy: -20))
     }
 }
 

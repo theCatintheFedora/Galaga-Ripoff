@@ -12,11 +12,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var paddle = SKSpriteNode()
     var enemies = [SKSpriteNode]()
     var playLabel = SKLabelNode()
-    var livesLabel = SKLabelNode()
-    var scoreLabel = SKLabelNode()
+    //var livesLabel = SKLabelNode()
+    //var scoreLabel = SKLabelNode()
     var playingGame = false
-    var score = 0
-    var lives = 3
+    //var score = 0
+    //var lives = 3
     var missiles = [SKSpriteNode]()
     var enemyMissiles = [SKSpriteNode]()
     //var count0 = 0
@@ -48,8 +48,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     if node.name == "playLabel" {
                         playingGame = true
                         node.alpha = 0
-                        score = 0
-                        lives = 3
+                        //score = 0
+                        //lives = 3
                         //updateLabels()
                         //fix this later
                         resetGame()
@@ -127,9 +127,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     if contact.bodyA.node?.name == "enemyOrdinance" ||
                         contact.bodyB.node?.name == "enemyOrdinance" {
                         paddle.removeFromParent()
-                        //playingGame = false
-                        resetGame()
-                        //fix this later
+                        print("you died")
+                        gameOver()
                     }
                 }
                 // }
@@ -259,6 +258,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemyMissiles.append(enemyOrdinance)
         enemyOrdinance.physicsBody?.isDynamic = true
         enemyOrdinance.physicsBody?.applyImpulse(CGVector(dx: 0, dy: -20))
+    }
+    
+    func gameOver() {
+        playingGame = false
+        playLabel.alpha = 1
+        playLabel.text = "You died (tap to replay)"
     }
 }
 

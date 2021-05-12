@@ -85,21 +85,42 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 contact.bodyB.node == enemy {
                 if contact.bodyA.node?.name == "ordinance" ||
                     contact.bodyB.node?.name == "ordinance" {
-                //      score += 1
-                //      updateLabels()
-                //      fix these later
-                enemy.removeFromParent()
-                //     removedEnemies += 1
-                //     if removedEnemies == enemies.count {
-                //        gameOver(winner: true)
-                //        there is no end
-                //         }
+                    //      score += 1
+                    //      updateLabels()
+                    //      fix these later
+                    enemy.removeFromParent()
+                    //     removedEnemies += 1
+                    //     if removedEnemies == enemies.count {
+                    //        gameOver(winner: true)
+                    //        there is no end
+                    //         }
+                    if contact.bodyA.node?.name == "enemyOrdinance" ||
+                        contact.bodyB.node?.name == "enemyOrdinance" {
+                        enemy.removeFromParent()
+                    }
                 }
             }
-            if contact.bodyA.node?.name == "ordinance" ||
-                contact.bodyB.node?.name == "ordinance" {
-                ordinance.removeFromParent()
+            for ordinance in missiles {
+                if contact.bodyA.node?.name == "ordinance" ||
+                    contact.bodyB.node?.name == "ordinance" {
+                    ordinance.removeFromParent()
+                }
             }
+            for enemyOrdinance in enemyMissiles {
+                if contact.bodyA.node?.name == "enemyOrdinance" ||
+                    contact.bodyB.node?.name == "enemyOrdinance" {
+                    enemyOrdinance.removeFromParent()
+                }
+            }
+            //for paddle {
+            if contact.bodyA.node == paddle ||
+                contact.bodyB.node == paddle {
+                if contact.bodyA.node?.name == "enemyOrdinance" ||
+                    contact.bodyB.node?.name == "enemyOrdinance" {
+                    paddle.removeFromParent()
+                }
+            }
+            // }
         }
         //    if contact.bodyA.node?.name == "loseZone" ||
         //       contact.bodyB.node?.name == "loseZone" {
@@ -166,6 +187,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemies.append(enemy)
         enemy.physicsBody?.isDynamic = true
         enemy.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -5...5), dy: -5))
+        enemyOrdinance(enemyPosition: enemy.position)
     }
     
     func makeLabels() {
@@ -207,11 +229,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ordinance.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 20))
     }
     
-    func enemyOrdinance() {
+    func enemyOrdinance(enemyPosition: CGPoint) {
         let enemyOrdinance = SKSpriteNode(imageNamed:"Enemy ordinance")
         enemyOrdinance.name = "enemyOrdinance"
         enemyOrdinance.setScale(0.15)
-        enemyOrdinance.position = enemy.position
+        enemyOrdinance.position = enemyPosition
         enemyOrdinance.physicsBody = SKPhysicsBody(circleOfRadius: enemyOrdinance.size.height/2)
         enemyOrdinance.physicsBody?.isDynamic = false
         enemyOrdinance.physicsBody?.usesPreciseCollisionDetection = true

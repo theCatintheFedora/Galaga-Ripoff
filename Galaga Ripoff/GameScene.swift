@@ -94,46 +94,59 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     //        gameOver(winner: true)
                     //        there is no end
                     //         }
-                    if contact.bodyA.node?.name == "enemyOrdinance" ||
-                        contact.bodyB.node?.name == "enemyOrdinance" {
-                        enemy.removeFromParent()
-                    }
                 }
             }
             for ordinance in missiles {
                 if contact.bodyA.node?.name == "ordinance" ||
                     contact.bodyB.node?.name == "ordinance" {
-                    ordinance.removeFromParent()
+                    if contact.bodyA.node?.name == "enemyOrdinance" ||
+                        contact.bodyB.node?.name == "enemyOrdinance" {
+                        ordinance.removeFromParent()
+                    }
+                    if contact.bodyA.node == enemy ||
+                        contact.bodyB.node == enemy {
+                        ordinance.removeFromParent()
+                    }
                 }
-            }
-            for enemyOrdinance in enemyMissiles {
-                if contact.bodyA.node?.name == "enemyOrdinance" ||
-                    contact.bodyB.node?.name == "enemyOrdinance" {
-                    enemyOrdinance.removeFromParent()
+                for enemyOrdinance in enemyMissiles {
+                    if contact.bodyA.node?.name == "enemyOrdinance" ||
+                        contact.bodyB.node?.name == "enemyOrdinance" {
+                        if contact.bodyA.node == paddle ||
+                            contact.bodyB.node == paddle {
+                            enemyOrdinance.removeFromParent()
+                        }
+                        if contact.bodyA.node?.name == "ordinance" ||
+                            contact.bodyB.node?.name == "ordinance" {
+                            enemyOrdinance.removeFromParent()
+                        }
+                    }
                 }
-            }
-            //for paddle {
-            if contact.bodyA.node == paddle ||
-                contact.bodyB.node == paddle {
-                if contact.bodyA.node?.name == "enemyOrdinance" ||
-                    contact.bodyB.node?.name == "enemyOrdinance" {
-                    paddle.removeFromParent()
+                //for paddle {
+                if contact.bodyA.node == paddle ||
+                    contact.bodyB.node == paddle {
+                    if contact.bodyA.node?.name == "enemyOrdinance" ||
+                        contact.bodyB.node?.name == "enemyOrdinance" {
+                        paddle.removeFromParent()
+                        //playingGame = false
+                        resetGame()
+                        //fix this later
+                    }
                 }
+                // }
             }
-            // }
+            //    if contact.bodyA.node?.name == "loseZone" ||
+            //       contact.bodyB.node?.name == "loseZone" {
+            //     lives -= 1
+            //     if lives > 0 {
+            //       score = 0
+            //      resetGame()
+            //      kickBall()
+            //       }
+            //      else {
+            //        gameOver(winner: false)
+            //         }
+            //     }
         }
-        //    if contact.bodyA.node?.name == "loseZone" ||
-        //       contact.bodyB.node?.name == "loseZone" {
-        //     lives -= 1
-        //     if lives > 0 {
-        //       score = 0
-        //      resetGame()
-        //      kickBall()
-        //       }
-        //      else {
-        //        gameOver(winner: false)
-        //         }
-        //     }
     }
     
     func resetGame() {
@@ -198,16 +211,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         playLabel.name = "playLabel"
         addChild(playLabel)
         
-        livesLabel.fontSize = 18
-        livesLabel.fontColor = .black
-        livesLabel.position = CGPoint(x: frame.minX + 50, y: frame.minY + 18)
-        addChild(livesLabel)
+        //       livesLabel.fontSize = 18
+        //     livesLabel.fontColor = .black
+        //   livesLabel.position = CGPoint(x: frame.minX + 50, y: frame.minY + 18)
+        // addChild(livesLabel)
         
-        scoreLabel.fontSize = 18
-        scoreLabel.fontColor = .black
-        scoreLabel.fontName = "Arial"
-        scoreLabel.position = CGPoint(x: frame.maxX - 50, y: frame.minY + 18)
-        addChild(scoreLabel)
+        //       scoreLabel.fontSize = 18
+        //     scoreLabel.fontColor = .black
+        //   scoreLabel.fontName = "Arial"
+        // scoreLabel.position = CGPoint(x: frame.maxX - 50, y: frame.minY + 18)
+        //addChild(scoreLabel)
     }
     
     func ordinance() {

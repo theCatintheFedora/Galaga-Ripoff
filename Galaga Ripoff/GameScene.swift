@@ -36,12 +36,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let location = touch.location(in: self)
             if playingGame {
                 paddle.position.x = location.x
-                timer0 = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true, block: { (timer) in
-                    self.attackingFighter()
-                })
-                timer1 = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block: { (timer) in
-                    self.ordinance()
-                })
             }
             else {
                 for node in nodes(at: location) {
@@ -150,6 +144,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func resetGame() {
         makePaddle()
+        for enemy in enemies {
+            if enemy.parent != nil {
+                enemy.removeFromParent()
+            }
+        }
+        for ordinance in missiles {
+            if ordinance.parent != nil {
+                ordinance.removeFromParent()
+                    }
+        }
+        for enemyOrdinance in enemyMissiles {
+            if enemyOrdinance.parent != nil {
+                enemyOrdinance.removeFromParent()
+            }
+        }
+        timer0 = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true, block: { (timer) in
+            if self.playingGame == true {
+            self.attackingFighter()
+            }
+        })
+        timer1 = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block: { (timer) in
+            if self.playingGame == true {
+            self.ordinance()
+            }
+        })
     }
     
     func attackingFighter() {
@@ -263,6 +282,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func gameOver() {
         playingGame = false
         playLabel.alpha = 1
+        timer0.invalidate()
+        timer1.invalidate()
+        //resetGame()
         playLabel.text = "You died (tap to replay)"
     }
 }

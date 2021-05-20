@@ -164,7 +164,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.attackingFighter()
             }
         })
-        timer1 = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block: { (timer) in
+        timer1 = Timer.scheduledTimer(withTimeInterval: 1.25, repeats: true, block: { (timer) in
             if self.playingGame == true {
             self.ordinance()
             }
